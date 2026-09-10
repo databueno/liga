@@ -1,39 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Web Text</title>
+  <title>Liga</title>
   <style>
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      max-width: 720px;
+      max-width: 600px;
       margin: 40px auto;
       padding: 0 20px;
-      line-height: 1.6;
-      color: #111827;
+      color: #1f2937;
       background-color: #f9fafb;
     }
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      font-family: inherit;
+    h2 { color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;}
+    
+    /* Table styling with alternating colors */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    th, td { padding: 12px 15px; text-align: left; }
+    tr:nth-child(even) { background-color: #f3f4f6; }
+    tr:nth-child(odd) { background-color: #ffffff; }
+    td:last-child { font-weight: bold; color: #2563eb; } /* Blue scores */
+
+    /* Clickable Encuentros section */
+    details {
+      margin-top: 30px;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+    }
+    summary {
+      font-weight: bold;
       font-size: 1.1rem;
+      cursor: pointer;
+      color: #059669; /* Green clickable text */
+      padding: 15px;
+      list-style-type: "🎾 ";
+    }
+    .encuentros-content {
+      padding: 0 15px 15px 15px;
+      white-space: pre-wrap;
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
-  <pre id="content">Loading text...</pre>
+  <div id="content">Cargando datos...</div>
 
   <script>
-    // Fetches notes.txt with a cache-buster so updates appear instantly upon refresh
     fetch('notes.txt?v=' + Date.now())
       .then(response => response.text())
       .then(text => {
-        document.getElementById('content').textContent = text;
-      })
-      .catch(() => {
-        document.getElementById('content').textContent = 'Error loading text.';
+        const lines = text.split('\n');
+        let html = '';
+        let inTable = false;
+        let inEncuentros = false;
+
+        for (let i = 0; i < lines.length; i++) {
+          let line = lines[i].trim();
+
+          // Trigger the collapsible section when it sees the word "Encuentros"
+          if (line.toLowerCase() === 'encuentros') {
+            if (inTable) { html += '</tbody></table>'; inTable = false; }
+            html += '<details><summary>Encuentros</summary><div class="encuentros-content">';
+            inEncuentros = true;
+            continue;
+          }
+
+          // Format anything under Encuentros as standard text
+          if (inEncuentros) {
+            if (line) html += line + '<br>';
+            continue;
+          }
+
+          // Build the table for comma-separated lines
+          if (line.includes(',')) {
+            if (!inTable) {
+              html += '<table><tbody>';
+              inTable = true;
+            }
+            const parts = line.split(',');
+            html += `<tr><td>${parts[0].trim()}</td><td>${parts[1].trim()}</td></tr>`;
+          } else {
+            if (inTable) { html += '</tbody></table>'; inTable = false; }
+            if (line) {
+              if (i === 0) html += `<h2>${line}</h2>`;
+              else html += `<p>${line}</p>`;
+            }
+          }
+        }
+        
+        if (inTable) html += '</tbody></table>';
+        if (inEncuentros) html += '</div></details>';
+        document.getElementById('content').innerHTML = html;
       });
   </script>
 </body>

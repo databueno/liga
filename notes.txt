@@ -1,7 +1,19 @@
 PUNTUACIÓN (SETS)
 
-Carlos:		2
-JA:       	1
-Cándido:   	0
-Javier:   	-1
-Fernando:	-2
+Ganar un set da un punto, perderlo resta uno.
+
+Equipo,puntos,jugados
+Carlos,2,2
+JA,1,1
+Cándido,0,0
+Javier,-1,1
+Fernando,-2,2
+
+
+
+Encuentros
+Fernando-Carlos
+0-2
+
+Javier-JA
+0-1
