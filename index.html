@@ -5,48 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Liga</title>
   <style>
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 0 20px;
-      color: #1f2937;
-      background-color: #f9fafb;
-    }
+    body { font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; color: #1f2937; background-color: #f9fafb; }
     h2 { color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;}
     
-    /* Table styling with alternating colors */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    th, td { padding: 12px 15px; text-align: left; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb;}
     tr:nth-child(even) { background-color: #f3f4f6; }
     tr:nth-child(odd) { background-color: #ffffff; }
-    td:last-child { font-weight: bold; color: #2563eb; } /* Blue scores */
+    tr:first-child { font-weight: bold; background-color: #d1d5db; color: #000; text-transform: uppercase; font-size: 0.9em;} /* Header style */
 
-    /* Clickable Encuentros section */
-    details {
-      margin-top: 30px;
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-    }
-    summary {
-      font-weight: bold;
-      font-size: 1.1rem;
-      cursor: pointer;
-      color: #059669; /* Green clickable text */
-      padding: 15px;
-      list-style-type: "🎾 ";
-    }
-    .encuentros-content {
-      padding: 0 15px 15px 15px;
-      white-space: pre-wrap;
-      line-height: 1.6;
-    }
+    details { margin-top: 30px; background: #ffffff; border: 1px solid #d1d5db; border-radius: 8px; }
+    summary { font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #059669; padding: 15px; list-style-type: "🎾 "; }
+    .encuentros-content { padding: 0 15px 15px 15px; white-space: pre-wrap; line-height: 1.6; }
   </style>
 </head>
 <body>
@@ -58,34 +28,27 @@
       .then(text => {
         const lines = text.split('\n');
         let html = '';
-        let inTable = false;
-        let inEncuentros = false;
+        let inTable = false; let inEncuentros = false;
 
         for (let i = 0; i < lines.length; i++) {
           let line = lines[i].trim();
 
-          // Trigger the collapsible section when it sees the word "Encuentros"
           if (line.toLowerCase() === 'encuentros') {
             if (inTable) { html += '</tbody></table>'; inTable = false; }
             html += '<details><summary>Encuentros</summary><div class="encuentros-content">';
-            inEncuentros = true;
-            continue;
+            inEncuentros = true; continue;
           }
 
-          // Format anything under Encuentros as standard text
           if (inEncuentros) {
-            if (line) html += line + '<br>';
-            continue;
+            if (line) html += line + '<br>'; continue;
           }
 
-          // Build the table for comma-separated lines
           if (line.includes(',')) {
-            if (!inTable) {
-              html += '<table><tbody>';
-              inTable = true;
-            }
+            if (!inTable) { html += '<table><tbody>'; inTable = true; }
             const parts = line.split(',');
-            html += `<tr><td>${parts[0].trim()}</td><td>${parts[1].trim()}</td></tr>`;
+            html += '<tr>';
+            for(let p of parts) html += `<td>${p.trim()}</td>`;
+            html += '</tr>';
           } else {
             if (inTable) { html += '</tbody></table>'; inTable = false; }
             if (line) {
@@ -94,7 +57,6 @@
             }
           }
         }
-        
         if (inTable) html += '</tbody></table>';
         if (inEncuentros) html += '</div></details>';
         document.getElementById('content').innerHTML = html;
