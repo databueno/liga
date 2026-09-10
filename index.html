@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Web Text</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      color: #111827;
+      background-color: #f9fafb;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: inherit;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <pre id="content">Loading text...</pre>
+
+  <script>
+    // Fetches notes.txt with a cache-buster so updates appear instantly upon refresh
+    fetch('notes.txt?v=' + Date.now())
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('content').textContent = text;
+      })
+      .catch(() => {
+        document.getElementById('content').textContent = 'Error loading text.';
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+PUNTUACIÓN (SETS)
+
+Carlos:		2
+JA:       	1
+Cándido:   	0
+Javier:   	-1
+Fernando:	-2
