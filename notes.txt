@@ -1,8 +1,10 @@
 PUNTUACIÓN (SETS)
 
+Liga CORIA
+
 Ganar un set da un punto, perderlo resta uno.
 
-Equipo,puntos,jugados
+Jugador,puntos,jugados
 Carlos,2,2
 JA,1,1
 Cándido,0,0
