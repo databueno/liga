@@ -12,14 +12,10 @@ Fernando,-2,2
 
 
 Encuentros
-Carlos-Fernando (8 sep)
-2-0
+Carlos-Fernando (8 sep): 2-0
 
-JA-Javier (9 sep)
-1-0
+JA-Javier (9 sep): 1-0
 
-Cándido-Javier (10 sep)
-0-2
+Cándido-Javier (10 sep): 0-2
 
-Carlos-JA (10 sep)
-2-0
+Carlos-JA (10 sep): 2-0
