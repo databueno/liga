@@ -1,36 +1,16 @@
 PUNTUACIÓN (SETS)
 
-Ganar un set da un punto, perderlo resta uno.
-
-Jugador,puntos,jugados
-Javier,4,8
-Ángel,2,2
-Fernando,1,5
-Carlos,0,8
-JA,-2,4
-Cándido,-5,7
-
-
+Ganar un set da un punto. Perderlo resta uno.
 
 Encuentros
 Carlos-Fernando (8 sep): 2-0
-
 JA-Javier (9 sep): 1-0
-
 Cándido-Javier (10 sep): 0-2
-
 Carlos-JA (10 sep): 2-0
-
 Fernando-Javier (12 sep): 1-0
-
 Carlos-Javier (13 sep): 0-1
-
 Carlos-Fernando (14 sep): 0-2
-
 Cándido-Javier (14 sep): 0-2
-
 Cándido-JA (15 sep): 1-0
-
 Ángel-Cándido (17 sep): 2-0
-
 Carlos-Javier (17 sep): 0-1

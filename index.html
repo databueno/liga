@@ -12,7 +12,7 @@
     th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb;}
     tr:nth-child(even) { background-color: #f3f4f6; }
     tr:nth-child(odd) { background-color: #ffffff; }
-    tr:first-child { font-weight: bold; background-color: #d1d5db; color: #000; text-transform: uppercase; font-size: 0.9em;} /* Header style */
+    th { font-weight: bold; background-color: #d1d5db; color: #000; text-transform: uppercase; font-size: 0.9em;}
 
     details { margin-top: 30px; background: #ffffff; border: 1px solid #d1d5db; border-radius: 8px; }
     summary { font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #059669; padding: 15px; list-style-type: "🎾 "; }
@@ -27,39 +27,77 @@
       .then(response => response.text())
       .then(text => {
         const lines = text.split('\n');
-        let html = '';
-        let inTable = false; let inEncuentros = false;
+        let headerHtml = '';
+        let matchesHtml = '';
+        let inEncuentros = false;
+        const players = {};
 
-        for (let i = 0; i < lines.length; i++) {
-          let line = lines[i].trim();
+        // Expresión regular para detectar: Jugador1-Jugador2 (fecha): X-Y
+        const matchRegex = /^(.+?)\s*-\s*(.+?)\s*\((.*?)\):\s*(\d+)\s*-\s*(\d+)$/;
 
-          if (line.toLowerCase() === 'encuentros') {
-            if (inTable) { html += '</tbody></table>'; inTable = false; }
-            html += '<details><summary>Encuentros</summary><div class="encuentros-content">';
-            inEncuentros = true; continue;
+        lines.forEach((line, index) => {
+          const tLine = line.trim();
+          if (!tLine) return;
+
+          if (tLine.toLowerCase() === 'encuentros') {
+            inEncuentros = true;
+            return;
           }
 
           if (inEncuentros) {
-            if (line) html += line + '<br>'; continue;
-          }
+            matchesHtml += tLine + '<br>';
+            
+            // Analizar el resultado del partido para calcular la tabla
+            const match = tLine.match(matchRegex);
+            if (match) {
+              const p1 = match[1].trim();
+              const p2 = match[2].trim();
+              const s1 = parseInt(match[4]);
+              const s2 = parseInt(match[5]);
 
-          if (line.includes(',')) {
-            if (!inTable) { html += '<table><tbody>'; inTable = true; }
-            const parts = line.split(',');
-            html += '<tr>';
-            for(let p of parts) html += `<td>${p.trim()}</td>`;
-            html += '</tr>';
+              if (!players[p1]) players[p1] = { points: 0, played: 0 };
+              if (!players[p2]) players[p2] = { points: 0, played: 0 };
+
+              // Sumar sets jugados
+              players[p1].played += (s1 + s2);
+              players[p2].played += (s1 + s2);
+              
+              // Calcular puntos (1 por set ganado, -1 por set perdido)
+              players[p1].points += (s1 - s2);
+              players[p2].points += (s2 - s1);
+            }
           } else {
-            if (inTable) { html += '</tbody></table>'; inTable = false; }
-            if (line) {
-              if (i === 0) html += `<h2>${line}</h2>`;
-              else html += `<p>${line}</p>`;
+            // Generar el texto de cabecera normal
+            if (index === 0 || !headerHtml) {
+              headerHtml += `<h2>${tLine}</h2>`;
+            } else {
+              // Si la línea contiene comas, la ignoramos para no generar la tabla antigua
+              if (!tLine.includes(',')) {
+                headerHtml += `<p>${tLine}</p>`;
+              }
             }
           }
+        });
+
+        // Construir la tabla HTML ordenada por puntos
+        let tableHtml = '<table><thead><tr><th>Jugador</th><th>Puntos</th><th>Jugados</th></tr></thead><tbody>';
+        
+        const sortedPlayers = Object.keys(players).sort((a, b) => {
+          return players[b].points - players[a].points;
+        });
+
+        sortedPlayers.forEach(p => {
+          tableHtml += `<tr><td>${p}</td><td>${players[p].points}</td><td>${players[p].played}</td></tr>`;
+        });
+        tableHtml += '</tbody></table>';
+
+        // Juntar todo el contenido
+        let finalHtml = headerHtml + tableHtml;
+        if (inEncuentros) {
+          finalHtml += `<details><summary>Encuentros</summary><div class="encuentros-content">${matchesHtml}</div></details>`;
         }
-        if (inTable) html += '</tbody></table>';
-        if (inEncuentros) html += '</div></details>';
-        document.getElementById('content').innerHTML = html;
+
+        document.getElementById('content').innerHTML = finalHtml;
       });
   </script>
 </body>
