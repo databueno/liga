@@ -1,7 +1,7 @@
 PUNTUACIÓN (SETS)
 
 Ganar un set da un punto. Perderlo resta uno.
-Máximo 4 sets al mes por contrincante.
+Máximo 4 sets de diferencia al mes por contrincante.
 
 Encuentros
 Carlos-Fernando (8 sep): 2-0
