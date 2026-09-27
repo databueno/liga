@@ -21,3 +21,4 @@ Cándido-Javier (24 sep): 1-0
 Cándido-Fernando (25 sep): 0-2
 Fernando-Javier (26 sep): 0-1
 Carlos-Fernando (26 sep): 0-2
+Carlos-Fernando (27 sep): 0-1
