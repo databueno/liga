@@ -32,7 +32,6 @@
         let inEncuentros = false;
         const players = {};
 
-        // Expresión regular para detectar: Jugador1-Jugador2 (fecha): X-Y
         const matchRegex = /^(.+?)\s*-\s*(.+?)\s*\((.*?)\):\s*(\d+)\s*-\s*(\d+)$/;
 
         lines.forEach((line, index) => {
@@ -45,9 +44,6 @@
           }
 
           if (inEncuentros) {
-            matchesHtml += tLine + '<br>';
-            
-            // Analizar el resultado del partido para calcular la tabla
             const match = tLine.match(matchRegex);
             if (match) {
               const p1 = match[1].trim();
@@ -58,20 +54,23 @@
               if (!players[p1]) players[p1] = { points: 0, played: 0 };
               if (!players[p2]) players[p2] = { points: 0, played: 0 };
 
-              // Sumar sets jugados
-              players[p1].played += (s1 + s2);
-              players[p2].played += (s1 + s2);
-              
-              // Calcular puntos (1 por set ganado, -1 por set perdido)
-              players[p1].points += (s1 - s2);
-              players[p2].points += (s2 - s1);
+              // Si es 0-0, solo inicializa al jugador (arriba), pero no suma ni se muestra
+              if (s1 === 0 && s2 === 0) {
+                 // Partido de registro invisible
+              } else {
+                 matchesHtml += tLine + '<br>';
+                 players[p1].played += (s1 + s2);
+                 players[p2].played += (s1 + s2);
+                 players[p1].points += (s1 - s2);
+                 players[p2].points += (s2 - s1);
+              }
+            } else {
+              matchesHtml += tLine + '<br>';
             }
           } else {
-            // Generar el texto de cabecera normal
             if (index === 0 || !headerHtml) {
               headerHtml += `<h2>${tLine}</h2>`;
             } else {
-              // Si la línea contiene comas, la ignoramos para no generar la tabla antigua
               if (!tLine.includes(',')) {
                 headerHtml += `<p>${tLine}</p>`;
               }
@@ -79,7 +78,6 @@
           }
         });
 
-        // Construir la tabla HTML ordenada por puntos
         let tableHtml = '<table><thead><tr><th>Jugador</th><th>Puntos</th><th>Jugados</th></tr></thead><tbody>';
         
         const sortedPlayers = Object.keys(players).sort((a, b) => {
@@ -91,7 +89,6 @@
         });
         tableHtml += '</tbody></table>';
 
-        // Juntar todo el contenido
         let finalHtml = headerHtml + tableHtml;
         if (inEncuentros) {
           finalHtml += `<details><summary>Encuentros</summary><div class="encuentros-content">${matchesHtml}</div></details>`;
