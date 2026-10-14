@@ -73,7 +73,6 @@
               matches.push({ originalLine: tLine });
             }
           } else {
-            // Ya no filtramos las comas, así mostramos el texto tal cual
             if (index === 0 || !headerHtml) {
               headerHtml += `<h2>${tLine}</h2>`;
             } else {
@@ -116,7 +115,7 @@
            players[k].ppc = 0.2 + (players[k].points - finalMin) * 0.1;
         });
 
-        // Cabeceras actualizadas: Jugador | PUNTOS | PPC | Jugados
+        // Cabeceras: Jugador | PUNTOS | PPC | Jugados
         let tableHtml = '<table><thead><tr><th>Jugador</th><th>Puntos</th><th>PPC</th><th>Jugados</th></tr></thead><tbody>';
         
         const sortedPlayers = Object.keys(players).sort((a, b) => {
@@ -135,4 +134,11 @@
 
         let finalHtml = headerHtml + tableHtml;
         if (inEncuentros) {
-          finalHtml += `<details><summary>Encuentros</summary
+          finalHtml += `<details><summary>Encuentros</summary><div class="encuentros-content">${matchesHtml}</div></details>`;
+        }
+
+        document.getElementById('content').innerHTML = finalHtml;
+      });
+  </script>
+</body>
+</html>
