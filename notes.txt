@@ -4,8 +4,6 @@ PPC (Precio Por Cabeza): cada jugador tiene un PPC en función de sus puntos.
 
 Si jugador A (PPC: 1.1) gana un set a jugador B (PPC 0.75), A gana 0.75 y B pierde 0.75. 
 
-Si B gana un set a A, B gana 1.1 y A pierde 1.1.
-
 Encuentros
 Carlos-Fernando (8 sep): 2-0
 JA-Javier (9 sep): 1-0
