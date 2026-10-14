@@ -13,7 +13,9 @@
     tr:nth-child(even) { background-color: #f3f4f6; }
     tr:nth-child(odd) { background-color: #ffffff; }
     th { font-weight: bold; background-color: #d1d5db; color: #000; text-transform: uppercase; font-size: 0.85em;}
-    .ppc-col { color: #059669; font-weight: bold; }
+    
+    /* PUNTOS en verde y negrita */
+    .puntos-col { color: #059669; font-weight: bold; }
 
     details { margin-top: 30px; background: #ffffff; border: 1px solid #d1d5db; border-radius: 8px; }
     summary { font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #059669; padding: 15px; list-style-type: "🎾 "; }
@@ -50,6 +52,7 @@
           return 9999;
         }
 
+        // Leer todo el texto
         lines.forEach((line, index) => {
           const tLine = line.trim();
           if (!tLine) return;
@@ -70,16 +73,16 @@
               matches.push({ originalLine: tLine });
             }
           } else {
+            // Ya no filtramos las comas, así mostramos el texto tal cual
             if (index === 0 || !headerHtml) {
               headerHtml += `<h2>${tLine}</h2>`;
             } else {
-              if (!tLine.includes(',')) {
-                headerHtml += `<p>${tLine}</p>`;
-              }
+              headerHtml += `<p>${tLine}</p>`;
             }
           }
         });
 
+        // Calcular puntos
         matches.forEach(m => {
           if (m.p1 && m.p2) {
              if (m.s1 === 0 && m.s2 === 0) {
@@ -88,14 +91,14 @@
                  matchesHtml += m.originalLine + '<br>';
                  const dateCode = parseDate(m.dateStr);
                  
-                 if (dateCode >= 1014) {
+                 if (dateCode >= 1014) { // Desde el 14 oct
                      const currentMin = Math.min(...Object.keys(players).map(k => players[k].points));
                      const ppc1 = 0.2 + (players[m.p1].points - currentMin) * 0.1;
                      const ppc2 = 0.2 + (players[m.p2].points - currentMin) * 0.1;
                      
                      players[m.p1].points += (m.s1 * ppc2 - m.s2 * ppc1);
                      players[m.p2].points += (m.s2 * ppc1 - m.s1 * ppc2);
-                 } else {
+                 } else { // Histórico normal
                      players[m.p1].points += (m.s1 - m.s2);
                      players[m.p2].points += (m.s2 - m.s1);
                  }
@@ -113,7 +116,8 @@
            players[k].ppc = 0.2 + (players[k].points - finalMin) * 0.1;
         });
 
-        let tableHtml = '<table><thead><tr><th>Jugador</th><th>PPC</th><th>Puntos</th><th>Jugados</th></tr></thead><tbody>';
+        // Cabeceras actualizadas: Jugador | PUNTOS | PPC | Jugados
+        let tableHtml = '<table><thead><tr><th>Jugador</th><th>Puntos</th><th>PPC</th><th>Jugados</th></tr></thead><tbody>';
         
         const sortedPlayers = Object.keys(players).sort((a, b) => {
           return players[b].points - players[a].points;
@@ -122,8 +126,8 @@
         sortedPlayers.forEach(p => {
           tableHtml += `<tr>
             <td>${p}</td>
-            <td class="ppc-col">${players[p].ppc.toFixed(2)}</td>
-            <td>${players[p].points.toFixed(2)}</td>
+            <td class="puntos-col">${players[p].points.toFixed(2)}</td>
+            <td>${players[p].ppc.toFixed(2)}</td>
             <td>${players[p].played}</td>
           </tr>`;
         });
@@ -131,11 +135,4 @@
 
         let finalHtml = headerHtml + tableHtml;
         if (inEncuentros) {
-          finalHtml += `<details><summary>Encuentros</summary><div class="encuentros-content">${matchesHtml}</div></details>`;
-        }
-
-        document.getElementById('content').innerHTML = finalHtml;
-      });
-  </script>
-</body>
-</html>
+          finalHtml += `<details><summary>Encuentros</summary
