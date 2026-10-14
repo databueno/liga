@@ -2,6 +2,7 @@ PUNTUACIÓN
 
 El PPC (Precio Por Cabeza) del jugador con menos puntos es 0.2. Para los demás jugadores es 0.1 más alto por cada punto de ventaja.
 
+
 Ejemplo, si hoy Ridru (PPC 1.1) gana a Fernando (PPC 2.1), Ridru suma 2.1 y Fernando pierde 2.1. 
 Si Fernando gana a Ridru, Fernando suma 1.1 y Ridru pierde 1.1.
 
