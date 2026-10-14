@@ -36,7 +36,6 @@
 
         const matchRegex = /^(.+?)\s*-\s*(.+?)\s*\((.*?)\):\s*(\d+)\s*-\s*(\d+)$/;
         
-        // Diccionario para interpretar las fechas
         const monthMap = { 'ene': 1, 'feb': 2, 'mar': 3, 'abr': 4, 'may': 5, 'jun': 6, 'jul': 7, 'ago': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dic': 12 };
 
         function parseDate(dateStr) {
@@ -45,13 +44,12 @@
             const day = parseInt(parts[0]);
             const month = monthMap[parts[1].substring(0, 3)];
             if (!isNaN(day) && month) {
-              return month * 100 + day; // Ejemplo: 14 oct = 1014
+              return month * 100 + day;
             }
           }
           return 9999;
         }
 
-        // PASO 1: Encontrar a todos los jugadores y generar textos
         lines.forEach((line, index) => {
           const tLine = line.trim();
           if (!tLine) return;
@@ -82,7 +80,6 @@
           }
         });
 
-        // PASO 2: Calcular el histórico en orden cronológico
         matches.forEach(m => {
           if (m.p1 && m.p2) {
              if (m.s1 === 0 && m.s2 === 0) {
@@ -91,17 +88,14 @@
                  matchesHtml += m.originalLine + '<br>';
                  const dateCode = parseDate(m.dateStr);
                  
-                 // Nueva regla dinámica de PPC desde el 14 de octubre
                  if (dateCode >= 1014) {
                      const currentMin = Math.min(...Object.keys(players).map(k => players[k].points));
                      const ppc1 = 0.2 + (players[m.p1].points - currentMin) * 0.1;
                      const ppc2 = 0.2 + (players[m.p2].points - currentMin) * 0.1;
                      
-                     // Intercambio de PPC por set
                      players[m.p1].points += (m.s1 * ppc2 - m.s2 * ppc1);
                      players[m.p2].points += (m.s2 * ppc1 - m.s1 * ppc2);
                  } else {
-                     // Regla antigua (histórico previo al 14 de octubre)
                      players[m.p1].points += (m.s1 - m.s2);
                      players[m.p2].points += (m.s2 - m.s1);
                  }
@@ -114,15 +108,13 @@
           }
         });
 
-        // PASO 3: Calcular el PPC Final de hoy para mostrarlo en la tabla
         const finalMin = Math.min(...Object.keys(players).map(k => players[k].points));
         Object.keys(players).forEach(k => {
            players[k].ppc = 0.2 + (players[k].points - finalMin) * 0.1;
         });
 
-        let tableHtml = '<table><thead><tr><th>Jugador</th><th>Puntos</th><th>Jugados</th><th>PPC actual</th></tr></thead><tbody>';
+        let tableHtml = '<table><thead><tr><th>Jugador</th><th>PPC</th><th>Puntos</th><th>Jugados</th></tr></thead><tbody>';
         
-        // Ordenar por puntos de mayor a menor
         const sortedPlayers = Object.keys(players).sort((a, b) => {
           return players[b].points - players[a].points;
         });
@@ -130,9 +122,9 @@
         sortedPlayers.forEach(p => {
           tableHtml += `<tr>
             <td>${p}</td>
+            <td class="ppc-col">${players[p].ppc.toFixed(2)}</td>
             <td>${players[p].points.toFixed(2)}</td>
             <td>${players[p].played}</td>
-            <td class="ppc-col">${players[p].ppc.toFixed(2)}</td>
           </tr>`;
         });
         tableHtml += '</tbody></table>';
