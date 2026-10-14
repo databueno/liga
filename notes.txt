@@ -1,7 +1,8 @@
 PUNTUACIÓN (SETS)
 
-Ganar un set da un punto. Perderlo resta uno.
-Máximo 4 puntos de diferencia al mes entre 2 jugadores.
+PPC (Precio Por Cabeza): Cada jugador tiene in PPC y este va cambiando. El PPC es 0.2 para el último clasificado y sube 0.1 por cada punto de ventaja en la tabla. 
+Ejemplo: Si Carlos (PPC 0.2) le gana un set a Fernando (PPC 2.1), Carlos gana 2.1 puntos y Fernando los pierde.
+Si Fernando (PPC 2.1) gana a Carlos, Fernando gana 0.2 puntos y Carlos los pierde.
 
 Encuentros
 Carlos-Fernando (8 sep): 2-0
