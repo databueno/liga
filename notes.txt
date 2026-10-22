@@ -1,8 +1,7 @@
 PUNTUACIÓN
 
-PPC (Precio Por Cabeza): cada jugador tiene un PPC en función de sus puntos.
-
-Si jugador A (PPC: 1.1) gana un set a jugador B (PPC 0.75), A gana 0.75 puntos y B los pierde. 
+Ganar un set da un punto. Perderlo resta uno.
+Máximo 4 puntos de diferencia al mes entre 2 jugadores.
 
 Encuentros
 Carlos-Fernando (8 sep): 2-0
